@@ -1,16 +1,21 @@
-# dice_roller_cat
+# 🎲 3D Dice Roller (Sirius Prep)
 
-A new Flutter project.
+Интерактивное мобильное приложение на **Flutter**, реализующее симуляцию броска игральных костей в 3D-пространстве. Создано в рамках подготовки к алгоритмическому конкурсу в "Сириусе".
 
-## Getting Started
+## ✨ Особенности
+- **3D Engine с нуля**: Весь рендеринг куба выполнен с использованием матричных преобразований `Matrix4` без сторонних библиотек.
+- **Z-Sorting**: Реализован алгоритм сортировки граней по оси Z для корректного отображения 3D-объектов.
+- **Custom Graphics**: Грани и точки кубика отрисованы через `CustomPaint` и `Canvas` для максимальной производительности.
+- **Smooth Physics**: Плавная анимация вращения с использованием `AnimationController`.
 
-This project is a starting point for a Flutter application.
+## 🛠 Технологии
+- **Dart / Flutter**
+- **Vector Math**: Работа с перспективой (Entry 3,2) и вращением.
+- **State Management**: Реактивное обновление значений через `StatefulWidget`.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Как запустить
+```bash
+git clone [https://github.com/ixlnickie/dice_roller_cat.git](https://github.com/ixlnickie/dice_roller_cat.git)
+cd dice_roller_cat
+flutter pub get
+flutter run
