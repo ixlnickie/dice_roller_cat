@@ -13,9 +13,3 @@
 - **Vector Math**: Работа с перспективой (Entry 3,2) и вращением.
 - **State Management**: Реактивное обновление значений через `StatefulWidget`.
 
-## 🚀 Как запустить
-```bash
-git clone [https://github.com/ixlnickie/dice_roller_cat.git](https://github.com/ixlnickie/dice_roller_cat.git)
-cd dice_roller_cat
-flutter pub get
-flutter run
