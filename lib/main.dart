@@ -57,58 +57,41 @@ class _DiceScreenState extends State<DiceScreen> with TickerProviderStateMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildDiceWithShadow(leftValue),
-                const SizedBox(width: 60),
-                _buildDiceWithShadow(rightValue),
+                Dice3D(value: leftValue, controller: _controller),
+                const SizedBox(width: 80),
+                Dice3D(value: rightValue, controller: _controller),
               ],
             ),
-            const SizedBox(height: 100),
-            _buildButton(),
+            const SizedBox(height: 120),
+            GestureDetector(
+              onTap: rollDice,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD8BFD8),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  isRolling ? "..." : "БРОСИТЬ",
+                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            const Text(
+              "Created by ixlnickie 🐾",
+              style: TextStyle(color: Color(0xFFD8BFD8), fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Обертка для кубика с тенью под ним
-  Widget _buildDiceWithShadow(int value) {
-    return Column(
-      children: [
-        Dice3D(value: value, controller: _controller),
-        const SizedBox(height: 20),
-        // Мягкая тень на полу
-        Container(
-          width: 60,
-          height: 10,
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildButton() {
-    return GestureDetector(
-      onTap: rollDice,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-        decoration: BoxDecoration(
-          color: const Color(0xFFD8BFD8),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Text(
-          isRolling ? "КАТИМ..." : "БРОСИТЬ",
-          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -124,21 +107,18 @@ class Dice3D extends StatelessWidget {
       animation: controller,
       builder: (context, child) {
         double p = controller.value;
-        
-        // В покое углы ровно 0, чтобы было всё видно. В анимации — вращение.
         double rotX = controller.isAnimating ? p * math.pi * 4 : 0.0;
         double rotY = controller.isAnimating ? p * math.pi * 2 : 0.0;
 
         final List<Map<String, dynamic>> faces = [
-          {'v': value, 'rx': 0.0, 'ry': 0.0}, // Передняя
-          {'v': 7 - value, 'rx': math.pi, 'ry': 0.0}, // Задняя
-          {'v': 2, 'rx': -math.pi / 2, 'ry': 0.0}, // Верхняя
-          {'v': 5, 'rx': math.pi / 2, 'ry': 0.0}, // Нижняя
-          {'v': 3, 'rx': 0.0, 'ry': math.pi / 2}, // Правая
-          {'v': 4, 'rx': 0.0, 'ry': -math.pi / 2}, // Левая
+          {'v': value, 'rx': 0.0, 'ry': 0.0},
+          {'v': 7 - value, 'rx': math.pi, 'ry': 0.0},
+          {'v': 2, 'rx': -math.pi / 2, 'ry': 0.0},
+          {'v': 5, 'rx': math.pi / 2, 'ry': 0.0},
+          {'v': 3, 'rx': 0.0, 'ry': math.pi / 2},
+          {'v': 4, 'rx': 0.0, 'ry': -math.pi / 2},
         ];
 
-        // Сортировка для корректного 3D
         faces.sort((a, b) => _getZ(a['rx'], a['ry'], rotX, rotY)
             .compareTo(_getZ(b['rx'], b['ry'], rotX, rotY)));
 
@@ -174,15 +154,9 @@ class Dice3D extends StatelessWidget {
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black12, width: 1),
-          // Вместо внешних теней используем градиент для объема внутри грани
-          gradient: RadialGradient(
-            colors: [Colors.white, Colors.grey.shade100],
-            center: Alignment.center,
-            radius: 0.8,
-          ),
+          color: Colors.white, // Теперь всегда белый
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.black.withOpacity(0.05), width: 1),
         ),
         child: CustomPaint(painter: DiceDotsPainter(val)),
       ),
@@ -195,7 +169,7 @@ class DiceDotsPainter extends CustomPainter {
   DiceDotsPainter(this.val);
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = const Color(0xFF2D2D2D);
+    final paint = Paint()..color = const Color(0xFF333333);
     double r = size.width * 0.08, c = size.width / 2, l = size.width * 0.25, h = size.width * 0.75;
     void d(double x, double y) => canvas.drawCircle(Offset(x, y), r, paint);
     if (val % 2 != 0) d(c, c);
